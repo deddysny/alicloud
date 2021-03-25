@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: oss-csi-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: ossplugin.csi.alibabacloud.com
+    volumeHandle: oss-csi-pv // The specified value must be the same as the name of the PV.
+    volumeAttributes:
+      bucket: "mongodbvolume"
+      url: "oss-ap-southeast-5.aliyuncs.com"
+      otherOpts: "-o max_stat_cache_size=0 -o allow_other"
+      akId: "xxxxxxxxxxxxxxxxxx"
+      akSecret: "xxxxxxxxxxxxxxxxxx"
