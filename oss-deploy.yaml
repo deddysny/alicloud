@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo-oss-deploy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: nginx-flexvolume-oss
+        image: nginx
+        volumeMounts:
+          - name: "oss1"
+            mountPath: "/data"
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - cd /data
+          initialDelaySeconds: 30
+          periodSeconds: 30
+      volumes:
+        - name: "oss1"
+          flexVolume:
+            driver: "alicloud/oss"
+            options:
+              bucket: "docker"
+              url: "oss-cn-hangzhou.aliyuncs.com"
+              akId: ***
+              akSecret: ***
+              otherOpts: "-o max_stat_cache_size=0 -o allow_other"
